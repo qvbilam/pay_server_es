@@ -16,29 +16,8 @@ class Notify
         $pay = new Pay();
         $data = $pay->weChat($this->wechatConfig)->verify($content);
         $msg = $data->__toString();
-        $status = $data['result_code'] == 'SUCCESS' ? 'bind_succ' : 'bind_fail';
-        // todo msg信息整合.
-        // 修改数据失败
-        if ($upateStatus['code'] != ReturnCode::SUCCESS) {
-            $errorMsg = $upateStatus['msg'];
-            go(function () use ($errorMsg, $msg) {
-                $path = EASYSWOOLE_ROOT . '/Log/wx-error/';
-                if (!is_dir($path)) {
-                    mkdir($path, 0777, true);
-                }
-                file_put_contents($path . date('Y-m-d') . '.log', "[" . date('Y-m-d H:i:s') . "]" . 'msg: ' . $errorMsg . ' result: ' . $msg . "\r\n", FILE_APPEND);
-            });
-            return $this->response()->write($pay->weChat($this->wechatConfig)->fail());
-        }
-        // 修改数据成功
-        go(function () use ($msg) {
-            $path = EASYSWOOLE_ROOT . '/Log/wx-success/';
-            if (!is_dir($path)) {
-                mkdir($path, 0777, true);
-            }
-            file_put_contents($path . date("Y-m-d") . '.log', "[" . date('Y-m-d H:i:s') . "]" . ' result: ' . $msg . "\r\n", FILE_APPEND);
-        });
-        return $this->response()->write($pay->weChat($this->wechatConfig)->success());
+        // $status = $data['result_code'] == 'SUCCESS' ? 'bind_succ' : 'bind_fail';
+
     }
 
     public static function XmlToArray($xml)

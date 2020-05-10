@@ -13,7 +13,8 @@ class Router extends AbstractRouter
     {
         // 支付二维码
         $routeCollector->addRoute(['GET', 'POST'], \Yaconf::get('qvbilam_pay.route.pay_qrcode'), '/Api/Pay/scan');
-        //
+        // 微信回调地址
+        $routeCollector->addRoute(['GET', 'POST'], '/notify/{type}', '/Api/Notify/acceptPayNotify');
 
     }
 }

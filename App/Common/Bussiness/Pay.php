@@ -25,14 +25,16 @@ class Pay
             'body' => $params['body'],
         ];
         if (!empty($params['attach'])) {
-            $data['attach'] = $params['attach'];
+            $attach = $data['attach'] = $params['attach'];
+        } else {
+            $attach = '';
         }
         $payType = PayValidate::unifiedorder($params);
         // 调用不同的支付
         $payClass = ClassArr::payClassStat();
         $payObj = ClassArr::initClass($payType['channel'], $payClass, [], true);
         $functionName = $payType['type'];
-        $codeUrl = $payObj->$functionName($params['money'], $tradeNo, $params['body'], $params['attach']);
+        $codeUrl = $payObj->$functionName($params['money'], $tradeNo, $params['body'], $attach);
         $data['code_url'] = $codeUrl;
         $data['sign'] = (new Sign())->getPaySign($data);
         return $data;
