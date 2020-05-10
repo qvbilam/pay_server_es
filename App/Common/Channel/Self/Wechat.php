@@ -15,7 +15,7 @@ class Wechat
     /*
      * 测试用的虚拟数据
      * */
-    protected $product_id = '123456789';
+    protected $product_id = '123456789';   // 产品id
     // protected $scan_body = '二滑大魔王扫码付款';
     protected $wap_body = '二滑大魔王-WAP测试';
     protected $order = 'CN201909091817355457';  // 找回钱的订单。
@@ -29,12 +29,11 @@ class Wechat
          * 再进行重定义
          * */
         $wechatConfig = new Config();
-        $wechatConfig->setAppId('wxf67e5d6039607945');
-        $wechatConfig->setMchId('1497029642');
-        $wechatConfig->setKey('wvlzXVG1xbYjclNDgvvTB7AkcEH9gizx');
-        $wechatConfig->setNotifyUrl("https://127.0.0.1/notify");
-        $wechatConfig->setApiClientCert('/Users/qvbilam/data/apiclient_cert.pem');
-        $wechatConfig->setApiClientKey('/Users/qvbilam/data/apiclient_key.pem');
+        $wechatConfig->setAppId(\Yaconf::get("qvbilam_pay.pay_wechat.app_id"));
+        $wechatConfig->setMchId(\Yaconf::get("qvbilam_pay.pay_wechat.mch_id"));
+        $wechatConfig->setKey(\Yaconf::get("qvbilam_pay.pay_wechat.key"));
+        $wechatConfig->setApiClientCert(\Yaconf::get("qvbilam_pay.pay_wechat.client_cert"));
+        $wechatConfig->setApiClientKey(\Yaconf::get("qvbilam_pay.pay_wechat.client_key"));
         $this->wechatConfig = $wechatConfig;
     }
 
@@ -57,7 +56,7 @@ class Wechat
             $bean->setAttach($attach);
         }
         //$bean->setSpbillCreateIp($this->request()->getHeader('x-real-ip')[0]);
-        $bean->setNotifyUrl(\Yaconf::get('qvbilam_pay.url_conf.notify'));
+        $bean->setNotifyUrl(\Yaconf::get('qvbilam_pay.pay_wechat.notify_url'));
         $pay = new Pay();
         $data = $pay->weChat($this->wechatConfig)->scan($bean);
         $url2 = $data->getCodeUrl();
