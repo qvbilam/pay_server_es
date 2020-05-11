@@ -15,8 +15,8 @@ class Wechat
     /*
      * 测试用的虚拟数据
      * */
-    protected $product_id = '123456789';   // 产品id
-    // protected $scan_body = '二滑大魔王扫码付款';
+    protected $product_id = '123456789';
+    protected $scan_body = '二滑大魔王扫码付款';
     protected $wap_body = '二滑大魔王-WAP测试';
     protected $order = 'CN201909091817355457';  // 找回钱的订单。
     protected $wechatConfig;
@@ -35,11 +35,38 @@ class Wechat
         $wechatConfig->setApiClientCert(\Yaconf::get("qvbilam_pay.pay_wechat.client_cert"));
         $wechatConfig->setApiClientKey(\Yaconf::get("qvbilam_pay.pay_wechat.client_key"));
         $this->wechatConfig = $wechatConfig;
+
     }
 
-    /*
-     * 扫码支付
-     * */
+    /**
+     * scan扫码支付
+     * 传入元-> 转成分
+     */
+//    public function scan($money, $outTradeNo, $body = '', $attach = '', $ip = '127.0.0.1')
+//    {
+//        $money = $money * 100;
+//        // $outTradeNo = 'CN' . date('YmdHis') . rand(1000, 9999);
+//        $outTradeNo = empty($outTradeNo) ? (new Order())->createNo() : $outTradeNo;
+//        $bean = new Scan();
+//        $bean->setOutTradeNo($outTradeNo);
+//        $bean->setProductId($this->product_id);
+////        $bean->setBody($this->scan_body);
+//        $bean->setBody($body);
+//        if (!empty($attach)) {
+//            $bean->setAttach($attach);
+//        }
+//        $bean->setTotalFee($money);
+//        $bean->setSpbillCreateIp($ip);
+//        $bean->setNotifyUrl(\Yaconf::get('qvbilam_pay.pay_wechat.notify_url'));
+//        // $bean->setSpbillCreateIp($this->request()->getHeader('x-real-ip')[0]);
+//        $pay = new Pay();
+//        $data = $pay->weChat($this->wechatConfig)->scan($bean);
+//        $url2 = $data->getCodeUrl();
+//        // 返回图片路径
+//        return $url2;
+//    }
+
+
     /**
      * scan扫码支付
      * 传入分
@@ -51,16 +78,15 @@ class Wechat
         $bean->setProductId($this->product_id);
         $bean->setBody($body);
         $bean->setTotalFee($money);
+        //$bean->setSpbillCreateIp($this->request()->getHeader('x-real-ip')[0]);
         $bean->setSpbillCreateIp($ip);
-        if (isset($attach)) {
+        if (!empty($attach)) {
             $bean->setAttach($attach);
         }
-        //$bean->setSpbillCreateIp($this->request()->getHeader('x-real-ip')[0]);
         $bean->setNotifyUrl(\Yaconf::get('qvbilam_pay.pay_wechat.notify_url'));
         $pay = new Pay();
         $data = $pay->weChat($this->wechatConfig)->scan($bean);
         $url2 = $data->getCodeUrl();
-        echo '扫码数据' . PHP_EOL;
         print_r($data);
         // 返回图片路径
         return \Yaconf::get('qvbilam_pay.server_host') . \Yaconf::get('qvbilam_pay.route.pay_qrcode') . "?data=" . $url2;
@@ -248,6 +274,12 @@ class Wechat
         //    [total_fee] => 1
         //    [transaction_id] => 4200000389201909093389846998
         //)
+    }
+
+    public function verify($content)
+    {
+        $pay = (new Pay());
+        $pay->weChat($this->wechatConfig)->verify($content);
     }
 
 
