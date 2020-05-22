@@ -87,7 +87,6 @@ class Wechat
         $pay = new Pay();
         $data = $pay->weChat($this->wechatConfig)->scan($bean);
         $url2 = $data->getCodeUrl();
-        print_r($data);
         // 返回图片路径
         return \Yaconf::get('qvbilam_pay.server_host') . \Yaconf::get('qvbilam_pay.route.pay_qrcode') . "?data=" . $url2;
     }

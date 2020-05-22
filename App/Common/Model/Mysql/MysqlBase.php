@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Common\Model\Mysql;
+
 use EasySwoole\Component\Singleton;
 use EasySwoole\Component\Di;
 use App\Common\Lib\CodeStatus;
@@ -38,13 +39,13 @@ class MysqlBase
         if ($obj == false) {
             return false;
         }
-        try{
+        try {
             if ($num == 1) {
                 $data = $obj->getOne($this->table, $field);
             } else {
                 $data = $obj->get($this->table, $num, $field);
             }
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             return false;
         }
         return $data;
@@ -59,9 +60,9 @@ class MysqlBase
         if ($obj == false) {
             return false;
         }
-        try{
+        try {
             $res = $obj->update($this->table, $updateData);
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             return false;
         }
         return $res;
@@ -77,6 +78,9 @@ class MysqlBase
             return false;
         }
         foreach ($conditon as $k => $v) {
+            if (!is_array($v)) {
+                $v = explode(',', $v);
+            }
             $res->where($k, ...$v);
         }
         return $res;

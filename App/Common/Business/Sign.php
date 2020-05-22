@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Common\Bussiness;
+namespace App\Common\Business;
 
 use App\Common\Model\Mysql\Merchant as MerchantModel;
 use App\Common\Lib\Sign as SignFactory;
@@ -13,11 +13,10 @@ class Sign
     public function getPaySign($data)
     {
         $merchantInfo = (new MerchantModel())->getByConditon([
-            'merchant_id' => [$data['merchant_id'], '='],
-            'app_id' => [$data['app_id'], '='],
+            'merchant_id' => $data['merchant_id']
         ], 'status,app_secret', 1);
         if (empty($merchantInfo)) {
-            echo (new MerchantModel())->db->getLastQuery() . PHP_EOL;
+            echo (new MerchantOrder())->model->db->getLastQuery() . PHP_EOL;
             throw new \Exception('商户不存在', -1);
         }
         if ($merchantInfo['status'] <= 0) {

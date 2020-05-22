@@ -3,7 +3,7 @@
 namespace App\HttpController\Api;
 
 use Endroid\QrCode\QrCode;
-use App\Common\Bussiness\Pay as PayBussiness;
+use App\Common\Business\Pay as PayBussiness;
 
 /*
  * 对客户接口

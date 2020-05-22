@@ -1,9 +1,18 @@
 <?php
 
-namespace App\Common\Bussiness;
+namespace App\Common\Business;
 
-class Order
+use App\Common\Model\Mysql\MerchantOrder as MerchantOrderModel;
+
+class Order extends BusinessBase
 {
+    public $model;
+
+    public function __construct()
+    {
+        $this->model = new MerchantOrderModel();
+    }
+
     /*
     * 查询订单
     * */

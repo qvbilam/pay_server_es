@@ -4,7 +4,9 @@
         "easyswoole/pay": "^1.28",
         "thingengineer/mysqli-database-class": "dev-master",
         "easyswoole/hot-reload": "^0.1.2",
-        "endroid/qr-code": "^3.7"
+        "endroid/qr-code": "^3.7",
+        "easyswoole/redis": "^1.1",
+        "ixudra/curl": "^6.19"
     },
     "autoload": {
         "psr-4": {

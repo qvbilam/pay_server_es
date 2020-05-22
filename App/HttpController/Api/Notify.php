@@ -3,6 +3,7 @@
 namespace App\HttpController\Api;
 
 use EasySwoole\Pay\WeChat\WeChat;
+use App\Common\Business\Notify as NotifyBusiness;
 use App\Common\Channel\Self\Wechat as WechatChannel;
 
 class Notify extends ApiBase
@@ -13,23 +14,37 @@ class Notify extends ApiBase
      * */
     public function acceptPayNotify()
     {
-        echo '支付回调:paramas参数' . PHP_EOL;
-        print_r($this->params);
-        echo '支付回调:payload参数' . PHP_EOL;
         $content = $this->request()->getBody()->__toString();
-        print_r($content);
-        echo '验证参数:' . PHP_EOL;
-        (new WechatChannel())->verify($content);
-        echo '支付结果转array' . PHP_EOL;
-        $arr  = WechatChannel::XmlToArray($content);
-        print_r($arr);
-//        if(empty($this->payload['type'])){
-//            return $this->error('请求失败');
-//        }
-//        $data = $this->payload;
-        // todo 验证参数
-//        Wechat::fail();
-//        WeChat::success();
+        // todo 根据类型走方法.
+        $this->wxResponse($content);
+    }
+
+    /*
+     * 发送通知
+     * */
+
+    /*
+     * 微信返回
+     * */
+    protected function wxResponse($params)
+    {
+        $content = $params;
+        // 验证参数
+        // $wechatChannelObj = new WechatChannel();
+        // $wechatChannelObj->verify($content);
+        $data = WechatChannel::XmlToArray($content);
+        if (!isset($data['result_code']) || !isset($data['return_code']) || $data['result_code'] != 'SUCCESS' || $data['return_code'] != 'SUCCESS') {
+            return Wechat::fail();
+        }
+        try {
+            $res = (new NotifyBusiness)->wechat($data);
+        } catch (\Exception $e) {
+            return Wechat::fail();
+        }
+        if (!$res) {
+            return Wechat::fail();
+        }
+        return WeChat::success();
     }
 
 }

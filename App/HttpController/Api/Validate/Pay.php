@@ -2,9 +2,11 @@
 
 namespace App\HttpController\Api\Validate;
 
+use App\Common\Business\MerchantOrder;
 use EasySwoole\Validate\Validate;
 use App\Common\Model\Mysql\Merchant as MerchantModel;
-use App\Common\Bussiness\Sign;
+use App\Common\Business\Sign;
+use App\Common\Business\MerchantOrder as MerchantOrdeModel;
 
 class Pay
 {
@@ -62,6 +64,11 @@ class Pay
         }
         if ($paramSign != $selfSign) {
             throw new \Exception('签名错误:' . $selfSign);
+        }
+        // 验证商户订单是否重复
+        $checkMerchantOrder = (new MerchantOrdeModel)->model->getByConditon(['merchant_id' => $data['merchant_id'], 'merchant_order' => $data['out_trade_no']]);
+        if ($checkMerchantOrder) {
+            throw new \Exception('商户订单重复');
         }
         return $payType[$data['pay_type']];
     }
