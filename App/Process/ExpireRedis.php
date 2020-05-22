@@ -51,7 +51,7 @@ class ExpireRedis extends AbstractProcess
             $curlData['sign'] = (new Sign())->getPaySign($curlData);
             $this->ResPayResNotifyToMerchant($data['notify_url'], $curlData);
         }
-        var_dump('my task run at ' . time());
+//        var_dump('my task run at ' . time());
     }
 
 
