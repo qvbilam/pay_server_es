@@ -2,7 +2,7 @@
 
 namespace App\HttpController\Api;
 
-use App\common\Model\Redis\RedisBase;
+use App\Common\Model\Redis\RedisBase;
 
 class Upload extends ApiBase
 {
