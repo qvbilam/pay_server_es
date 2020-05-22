@@ -40,7 +40,7 @@ class Upload extends ApiBase
         $uploadId = $this->params['upload_id'];
         $fileUserPath = $this->params['file_path'];
         $fileName = $this->params['file_name'];
-        $filePath = EASYSWOOLE_ROOT . "/upload/$userName/" . trim($fileUserPath, '/') . "/chunck/";
+        $filePath = EASYSWOOLE_ROOT . "/Upload/$userName/" . trim($fileUserPath, '/') . "/chunck/";
         if (!file_exists(iconv("UTF-8", "GBK", $filePath))) {
             mkdir($filePath, 0744, true);
         }
