@@ -68,6 +68,7 @@ class Upload extends ApiBase
         // 3. 通过upload_id查询redis判断所有分块是否完成
         $redis = RedisBase::getInstance()->redis;
         $fileInfo = $redis->hGetAll("File_" . $uploadId);
+
         if (!$fileInfo) {
             return $this->error('上传失败');
         }
@@ -92,6 +93,7 @@ class Upload extends ApiBase
         if (!$delFile) {
 
         }
+        $redis->del("File_" . $uploadId);
         return $this->success();
     }
 
